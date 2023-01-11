@@ -17,5 +17,9 @@
             "1-1":160000 // time since collection of factory at coordinates 1-1
         }
 
+    },
+    "resources": {
+        "1":1, // count of things
+        "2":3 // 2=steel see refs.py
     }
 }

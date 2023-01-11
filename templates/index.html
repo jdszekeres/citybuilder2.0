@@ -21,7 +21,10 @@
   margin-right: 160px; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
   padding: 0px 10px;
+position: fixed;
+left: 160px;
 }
+
 .white {
     color: white
 }
@@ -29,11 +32,25 @@
 </head>
 <body>
     <div class="container">
-        <div class="main"></div>
+            <table class="main">
+                {% for i in grid %}
+                    <tr>
+                    {%for j in i%}
+                        {%if j != None and j != "" and j != " "%}
+                        <td><img src="/static/{{rem_num(j.split('-')[0])}}/{{j}}.png" width="32" height="32"></td>
+                        {%endif%}
+                    {%endfor%}
+                    </tr>
+                {%endfor%}
+            </table>
         <div class="sidebar">
+            <h1 class="white">${{round(money,2)}}</h1>
             {% for i in resources %}
                 <img src="/static/production/{{i[0]}}.png"><span class="white">&times; {{i[1]}}</span><br>
             {% endfor %}
+            <br>
+            <h2 class="white">Tax per minute: {{tpm}}</h2>
+            <h3><a href="/collect">collect tax</a></h3>
         </div>
 
     </div>
