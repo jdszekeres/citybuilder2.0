@@ -6,5 +6,16 @@
         [],
         [],
         []
-    ]
+    ],
+    "money":5000, // money in users "account"
+    "name":"my city", // name of city
+    "hash":"sha256 of users city pin", // authentification of user
+    "tax":15, // money per minute
+    "datetime": {
+        "tax":1600000, // time since last tax collection
+        "factory":{
+            "1-1":160000 // time since collection of factory at coordinates 1-1
+        }
+
+    }
 }
