@@ -1,6 +1,6 @@
 {
     "grid": [
-        ["home1-1"," "," "," "," "," "], // the number after home is the upgraded level. the number after that is the style
+        ["home-1-1"," "," "," "," "," "], // the number after home is the upgraded level. the number after that is the style
         [" ", "factory-3"," "," "," "," "], // the number after the factory refers both to the design number and the material it produces and the time to produce
         [],
         [],

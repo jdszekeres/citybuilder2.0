@@ -25,20 +25,48 @@ position: fixed;
 left: 160px;
 }
 
-.white {
+.white, #shop {
     color: white
+}
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden
+}
+.collapsible {
+  background-color: #777;
+  color: white;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+.shop-clear {
+    background-color: transparent;
+    border: 0px solid transparent;
+    color: white;
+    margin: auto;
+}
+.selected {
+    background-color: green;
+    
 }
     </style>
 </head>
 <body>
     <div class="container">
             <table class="main">
-                {% for i in grid %}
+                {% for l, i in enumerate(grid) %}
                     <tr>
-                    {%for j in i%}
+                    {%for k, j in enumerate(i)%}
                         {%if j != None and j != "" and j != " "%}
-                        <td><img src="/static/{{rem_num(j.split('-')[0])}}/{{j}}.png" width="32" height="32"></td>
+                        <td><button width="32" height="32" style="border-radius:0;border:0px"><img src="/static/{{get_type(j)}}/{{j}}.png" width="100%" height="100%"></button></td>
+                        {% else %}
+                        <td><button width="32" height="32" style="border-radius:0;border:0px" onclick="build({{l}},{{k}})"><img src="/static/empty.png" width="32"/></button></td>
                         {%endif%}
+                        
                     {%endfor%}
                     </tr>
                 {%endfor%}
@@ -50,9 +78,60 @@ left: 160px;
             {% endfor %}
             <br>
             <h2 class="white">Tax per minute: {{tpm}}</h2>
-            <h3><a href="/collect">collect tax</a></h3>
+            <h3 class="white">last collection: <span id="lc"></span></h3>
+            <h3><a href="/collect_tax">collect tax</a></h3>
+            <div id="shop">
+                {% for i in shop %}
+                <button type="button" class="collapsible">{{i["name"]}}</button>
+                <div class="content">
+                    {% for item in i["items"] %}
+                        <button onclick="highlight(this)" class="shop-clear"><img src="/static/{{get_type(item['id'])}}/{{home_type(item['id'],hid)}}.png" id="{{item['price']}}"><br>{{item["name"]}}<br>${{item["price"]}}</button>
+                        <br>
+                    {%endfor%}
+                </div>
+                {% endfor %}
+            </div>
         </div>
 
     </div>
 </body>
+<script>
+    var loaded;
+    function build(x,y) {
+        console.log([x,y,loaded])
+        if (loaded===undefined) {
+            alert("please select something to buy before building")
+        } else {
+            fetch("/build/"+loaded+"/"+x+"/"+y+"/"+document.getElementsByClassName("shop-clear")[0].children[0].id).then(x=>x.json).then(y=>location.reload())
+            
+        }
+    }
+    function highlight(object) {
+        [...document.getElementsByClassName("shop-clear")].forEach(element => {
+            element.classList.remove("selected")
+        });
+        object.classList.add("selected")
+        url=object.children[0].src.split("/")
+        console.log(url[url.length-1].replace(".png",""))
+        loaded=url[url.length-1].replace(".png","")
+    }
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+        content.style.display = "none";
+        } else {
+        content.style.display = "block";
+        }
+    });
+    }
+    var date = new Date(0);
+    date.setUTCSeconds({{dt["tax"]}})
+    document.getElementById("lc").innerText=date.toLocaleString()
+    
+</script>
 </html>

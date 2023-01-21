@@ -10,13 +10,14 @@ import random # select home style
 import datetime # for time related tasks
 import refs # constants to refer to
 import os# paths
-import jstyleson
+
 
 app = Flask("city builder") # create an app object for flask
-f=open("sample.json")
-b=jstyleson.loads(f.read())
+city_file="my_city.json"
+f=open(city_file)
+b=json.loads(f.read())
+f.close()
 assets_folder = "assets"
-home_count = 1 # number of home styles (max 2nd number in assets/home) ie. home2-1.png the 1 is important
 
 @app.route("/")
 def index():
@@ -24,12 +25,39 @@ def index():
     grid=b["grid"]
     resources=b["resources"]
     tpm=b["tax"]
-    return render_template("index.html",money=money,grid=grid,resources=resources.items(),tpm=tpm) # render main page 
-
+    dt=b["datetime"]
+    home_id=random.randint(1,refs.home_count)
+    return render_template("index.html",money=money,grid=grid,resources=resources.items(),tpm=tpm,shop=refs.SHOP,dt=dt,hid=home_id) # render main page 
+@app.route("/collect_tax")
+def collect_tax():
+    tpm=b["tax"]
+    time_since=b["datetime"]["tax"]
+    b["money"] += round(refs.minutes_since(time_since).total_seconds()*tpm/60)
+    b["datetime"]["tax"]=refs.time_in_future(0)
+    f=open(city_file,"w+")
+    f.write(json.dumps(b))
+    f.close()
+    return redirect("/")
+@app.route("/build/<building>/<x>/<y>/<price>")
+def build(building,x,y,price):
+    if int(price) > b["money"]:
+        return redirect("/")
+    x=int(x)
+    y=int(y)
+    b["money"]-=int(price)
+    b["grid"][x][y]=building
+    b["tax"]+=round(int(price)/1000)
+    b=refs.apply_factory(b)
+    f=open(city_file,"w+")
+    f.write(json.dumps(b))
+    f.close()
+    
+    return jsonify({"building":building,"x":x,"y":y})
 
 app.jinja_env.globals.update(round=round) # pass functions jinga
-app.jinja_env.globals.update(rem_num=refs.rem_num) # pass functions jinga
-
+app.jinja_env.globals.update(get_type=refs.get_type) # pass functions jinga
+app.jinja_env.globals.update(enumerate=enumerate)
+app.jinja_env.globals.update(home_type=refs.home_type)
 if __name__ == "__main__":
     app.run("0.0.0.0",8080,debug=True) # if run from file, debug mode
     f.close()
