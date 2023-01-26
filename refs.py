@@ -6,7 +6,7 @@ home_count = 1 # number of home styles (max 2nd number in assets/home) ie. home2
 
 PRODUCTION_ITEMS=["","Wood","Steel","Plastic","Seeds","Sand","Ore"] # list of producable materials
 FACTORY_PRICES  =["", 2500,  5000,   7500,     10000,  15000, 20000]
-
+MATERIAL_PRICES = ["",2,   5,    10,    20,    50,     100,   150  ]
 SHOP = [
     {"name":"homes","items":[
         {"name":"house","id":"home-1-{}","price":1000},
@@ -65,7 +65,7 @@ def collect_factory(b):
     for i in b["datetime"]["factory"].items():
         coord=i[0].split("-")
         factory=int(b["grid"][int(coord[0])][int(coord[1])].replace("factory-",""))
-        items=round(minutes_since(i[1]).total_seconds()/60/factory)
+        items=round((minutes_since(i[1]).total_seconds()/3600)*len(PRODUCTION_ITEMS)-factory)
         try:
             b["resources"][str(factory)]+=items
         except KeyError:
