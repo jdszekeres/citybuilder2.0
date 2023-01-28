@@ -66,7 +66,7 @@ def collect_factory(b):
         coord=i[0].split("-")
         factory=int(b["grid"][int(coord[0])][int(coord[1])].replace("factory-",""))
         print((minutes_since(i[1]).total_seconds()/3600))
-        items=round((minutes_since(i[1]).total_seconds()/3600)*factory)
+        items=round((minutes_since(i[1]).total_seconds()/3600)/factory)
         try:
             b["resources"][str(factory)]+=items
         except KeyError:
