@@ -53,7 +53,14 @@ def build(building,x,y,price):
     f.close()
     
     return jsonify({"building":building,"x":x,"y":y})
-
+@app.route("/expand")
+def expand():
+    size=len(b["grid"])
+    for i in range(0,len(b["grid"])):
+        b["grid"][i].append("")
+    b["grid"].append(["" for i in range(0,size+1)])
+    b["money"]-=((size+1)*2)*10000
+    return redirect("/")
 app.jinja_env.globals.update(round=round) # pass functions jinga
 app.jinja_env.globals.update(get_type=refs.get_type) # pass functions jinga
 app.jinja_env.globals.update(enumerate=enumerate)
