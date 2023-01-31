@@ -21,6 +21,7 @@ assets_folder = "assets"
 
 @app.route("/")
 def index():
+    global b
     money=b["money"]
     grid=b["grid"]
     resources=b["resources"]
@@ -30,16 +31,41 @@ def index():
     return render_template("index.html",money=money,grid=grid,resources=resources.items(),tpm=tpm,shop=refs.SHOP,dt=dt,hid=home_id) # render main page 
 @app.route("/collect_tax")
 def collect_tax():
-    tpm=b["tax"]
+    global b
+    tph=b["tax"]
     time_since=b["datetime"]["tax"]
-    b["money"] += round(refs.minutes_since(time_since).total_seconds()*tpm/60)
+    b["money"] += round(refs.minutes_since(time_since).total_seconds()*tph/3600)
     b["datetime"]["tax"]=refs.time_in_future(0)
     f=open(city_file,"w+")
     f.write(json.dumps(b))
     f.close()
     return redirect("/")
+@app.route("/collect_factory")
+def collect_materials():
+    global b
+    refs.collect_factory(b)
+    f=open(city_file,"w+")
+    f.write(json.dumps(b))
+    f.close()
+    return redirect("/")
+@app.route("/sellmat/<typeof>")
+def sell_goods(typeof):
+    try:
+        price = b["resources"][typeof] * refs.MATERIAL_PRICES[int(typeof)]
+        b["resources"][typeof]=0
+        b["money"]+=price
+        f=open(city_file,"w+")
+        f.write(json.dumps(b))
+        f.close()
+        print(refs.add_comma(price)+":"+refs.PRODUCTION_ITEMS[typeof])
+        return redirect("/")
+
+    except Exception as e:
+        print(e)
+    return redirect("/")
 @app.route("/build/<building>/<x>/<y>/<price>")
 def build(building,x,y,price):
+    global b
     if int(price) > b["money"]:
         return redirect("/")
     x=int(x)
@@ -65,6 +91,9 @@ app.jinja_env.globals.update(round=round) # pass functions jinga
 app.jinja_env.globals.update(get_type=refs.get_type) # pass functions jinga
 app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(home_type=refs.home_type)
+app.jinja_env.globals.update(add_comma=refs.add_comma)
+
 if __name__ == "__main__":
+    refs.collect_factory(b)
     app.run("0.0.0.0",8080,debug=True) # if run from file, debug mode
     f.close()

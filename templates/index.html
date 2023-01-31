@@ -53,6 +53,10 @@ left: 160px;
     background-color: green;
     
 }
+td {
+    border: 5px solid black; 
+  outline: 1px solid yellow;
+}
     </style>
 </head>
 <body>
@@ -72,15 +76,15 @@ left: 160px;
                 {%endfor%}
             </table>
         <div class="sidebar">
-            <h1 class="white">${{round(money,2)}}</h1>
+            <h1 class="white">${{add_comma(round(money,2))}}</h1>
             {% for i in resources %}
-                <img src="/static/production/{{i[0]}}.png"><span class="white">&times; {{i[1]}}</span><br>
+                <img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'"><span class="white">&times; {{add_comma(i[1])}}</span><br>
             {% endfor %}
             <br>
-            <h2 class="white">Tax per minute: {{tpm}}</h2>
-            <h3 class="white">last collection: <span id="lc"></span></h3>
-            <h3><a href="/collect_tax">collect tax</a></h3>
-            <h3><a href="/expand">expand land</a></h3>
+            <h2 class="white">Tax per hour: ${{tpm}}</h2>
+            <h3 class="white">last collection: <br>tax:<br><span id="lc"></span></h3>
+            <h3><a href="/collect_tax">collect tax</a><br><a href="/collect_factory">collect materials</a></a></h3>
+            <h3><a href="/expand">expand land $10K per plot </a></h3>
             <div id="shop">
                 {% for i in shop %}
                 <button type="button" class="collapsible">{{i["name"]}}</button>

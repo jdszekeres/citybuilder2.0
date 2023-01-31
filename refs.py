@@ -6,7 +6,7 @@ home_count = 1 # number of home styles (max 2nd number in assets/home) ie. home2
 
 PRODUCTION_ITEMS=["","Wood","Steel","Plastic","Seeds","Sand","Ore"] # list of producable materials
 FACTORY_PRICES  =["", 2500,  5000,   7500,     10000,  15000, 20000]
-
+MATERIAL_PRICES = ["",2,   5,    10,    20,    50,     100,   150  ]
 SHOP = [
     {"name":"homes","items":[
         {"name":"house","id":"home-1-{}","price":1000},
@@ -53,11 +53,24 @@ def create_file(name,pin):
     json.dump(thing,file)
     file.close()
 def apply_factory(b) -> dict:
-    for x,i in enumerate(b):
+    for x,i in enumerate(b["grid"]):
         for y,j in enumerate(i):
             if "factory" in j:
-                if x+"-"+y in b["datetime"]:
+                if str(x)+"-"+str(y) in b["datetime"]["factory"]:
                     pass
                 else:
-                    b["datetime"][x+"-"+y]=time_in_future(0)
+                    b["datetime"]["factory"][str(x)+"-"+str(y)]=time_in_future(0)
     return b
+def collect_factory(b):
+    for i in b["datetime"]["factory"].items():
+        coord=i[0].split("-")
+        factory=int(b["grid"][int(coord[0])][int(coord[1])].replace("factory-",""))
+        print((minutes_since(i[1]).total_seconds()/3600))
+        items=round((minutes_since(i[1]).total_seconds()/3600)/factory)
+        try:
+            b["resources"][str(factory)]+=items
+        except KeyError:
+            b["resources"][str(factory)]=items
+        b["datetime"]["factory"][i[0]]=time_in_future(0)
+    return b    
+
