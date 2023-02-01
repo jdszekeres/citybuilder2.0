@@ -137,6 +137,19 @@ td {
     var date = new Date(0);
     date.setUTCSeconds({{dt["tax"]}})
     document.getElementById("lc").innerText=date.toLocaleString()
-    
+    caches.open("img-assets")
+    .then(cache => {
+    cache.addAll(
+        ["/static/empty.png",
+        "/static/expand.png",
+        "/static/production/1.png",
+        "/static/production/2.png",
+        "/static/production/3.png",
+        "/static/production/4.png",
+        "/static/production/5.png",
+        "/static/production/6.png"
+        
+    ])
+    });
 </script>
 </html>
