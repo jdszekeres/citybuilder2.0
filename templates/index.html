@@ -84,7 +84,7 @@ td {
             <h2 class="white">Tax per hour: ${{tpm}}</h2>
             <h3 class="white">last collection: <br>tax:<br><span id="lc"></span></h3>
             <h3><a href="/collect_tax">collect tax</a><br><a href="/collect_factory">collect materials</a></a></h3>
-            <h3><a href="/expand">expand land $10K per plot </a></h3>
+            <h3><a href="/expand"><img src="/static/expand.png" width="64px"> $10K per plot for ${{add_comma(((len(grid)+1)*2)*10000)}}</a></h3>
             <div id="shop">
                 {% for i in shop %}
                 <button type="button" class="collapsible">{{i["name"]}}</button>
