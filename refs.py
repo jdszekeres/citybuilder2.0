@@ -15,6 +15,11 @@ SHOP = [
         ]},
     {"name":"factories","items":
         [{"name":PRODUCTION_ITEMS[i]+" Factory","id":"factory-"+str(i),"price":FACTORY_PRICES[i]} for i in range(1,len(PRODUCTION_ITEMS))]
+    },
+    {"name":"park","items":
+    [
+        {"name":"playground", "id":"park-1","price":500,"materials":{"2":1,"3":1,"5":1}}
+        ]
     }
 ]
 def time_in_future(mins) -> float:
@@ -32,6 +37,8 @@ def get_type(string) -> str:
         return "factory"
     elif "production" in string:
         return "production"
+    elif "park" in string:
+        return "park"
 
 def create_file(name,pin):
     file=open(name+".json","w+")
@@ -73,4 +80,11 @@ def collect_factory(b):
             b["resources"][str(factory)]=items
         b["datetime"]["factory"][i[0]]=time_in_future(0)
     return b    
-
+def req_mat(string) -> bool:
+    """see if thing requires materials to craft"""
+    return get_type(string) in ["park"]
+def has_mat(b,mats):
+    for i in mats:
+        if b["resources"][i[0]] < i[1]:
+            return False
+    return True

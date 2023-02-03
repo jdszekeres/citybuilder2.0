@@ -70,14 +70,25 @@ def build(building,x,y,price):
         return redirect("/")
     x=int(x)
     y=int(y)
+    if refs.req_mat(building):
+        for i in refs.SHOP:
+            for r in i["items"]:
+                if r["id"]==building:
+                    mats=r["materials"].items()
+        if refs.has_mat(b,mats):
+            for i in mats:
+                
+                b["resources"][i[0]]-=i[1]
+        else:
+            return redirect("/")
     b["money"]-=int(price)
+    print(x,y)
     b["grid"][x][y]=building
     b["tax"]+=round(int(price)/1000)
     b=refs.apply_factory(b)
     f=open(city_file,"w+")
     f.write(json.dumps(b))
     f.close()
-    
     return jsonify({"building":building,"x":x,"y":y})
 @app.route("/expand")
 def expand():
