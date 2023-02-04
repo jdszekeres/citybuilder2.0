@@ -77,8 +77,9 @@ td {
             </table>
         <div class="sidebar">
             <h1 class="white">${{add_comma(round(money,2))}}</h1>
+            <h2 class="white"><img src="/static/person.png">{{add_comma(pop)}}</h2>
             {% for i in resources %}
-                <img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'"><span class="white">&times; {{add_comma(i[1])}}</span><br>
+                <img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'"><span class="white">&times; {{add_comma(floor(i[1]))}}</span><br>
             {% endfor %}
             <br>
             <h2 class="white">Tax per hour: ${{tpm}}</h2>
@@ -94,7 +95,9 @@ td {
                             <br>
                             {% for i in item["materials"].items()%}
                                 <img src="/static/production/{{i[0]}}.png">&times;{{i[1]}}
+                                <br>
                             {%endfor%}
+                            
                             {%endif%}<span>${{add_comma(item["price"])}}</span>
                         
                         </button>
@@ -104,6 +107,8 @@ td {
                 </div>
                 {% endfor %}
             </div>
+            <br>
+            made with flask by jdszekeres
         </div>
 
     </div>

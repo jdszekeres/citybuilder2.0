@@ -10,7 +10,7 @@ import random # select home style
 import datetime # for time related tasks
 import refs # constants to refer to
 import os# paths
-
+import math # flooring
 
 app = Flask("city builder") # create an app object for flask
 city_file="my_city.json"
@@ -28,7 +28,7 @@ def index():
     tpm=b["tax"]
     dt=b["datetime"]
     home_id=random.randint(1,refs.home_count)
-    return render_template("index.html",money=money,grid=grid,resources=resources.items(),tpm=tpm,shop=refs.SHOP,dt=dt,hid=home_id) # render main page 
+    return render_template("index.html",money=money,grid=grid,resources=resources.items(),tpm=tpm,shop=refs.SHOP,dt=dt,hid=home_id,pop=b["population"]) # render main page 
 @app.route("/collect_tax")
 def collect_tax():
     global b
@@ -86,6 +86,7 @@ def build(building,x,y,price):
     b["grid"][x][y]=building
     b["tax"]+=round(int(price)/1000)
     b=refs.apply_factory(b)
+    b=refs.census(b)
     f=open(city_file,"w+")
     f.write(json.dumps(b))
     f.close()
@@ -107,7 +108,8 @@ app.jinja_env.globals.update(enumerate=enumerate)
 app.jinja_env.globals.update(home_type=refs.home_type)
 app.jinja_env.globals.update(add_comma=refs.add_comma)
 app.jinja_env.globals.update(len=len)
+app.jinja_env.globals.update(floor=math.floor)
+
 if __name__ == "__main__":
-    
     app.run("0.0.0.0",8080,debug=True) # if run from file, debug mode
     f.close()

@@ -7,6 +7,7 @@ home_count = 1 # number of home styles (max 2nd number in assets/home) ie. home2
 PRODUCTION_ITEMS=["","Wood","Steel","Plastic","Seeds","Sand","Ore"] # list of producable materials
 FACTORY_PRICES  =["", 2500,  5000,   7500,     10000,  15000, 20000]
 MATERIAL_PRICES = ["",2,   5,    10,    20,    50,     100,   150  ]
+HOUSING_POP=["",7,150,1000]
 SHOP = [
     {"name":"homes","items":[
         {"name":"house","id":"home-1-{}","price":1000},
@@ -18,7 +19,8 @@ SHOP = [
     },
     {"name":"park","items":
     [
-        {"name":"playground", "id":"park-1","price":500,"materials":{"2":1,"3":1,"5":1}}
+        {"name":"playground", "id":"park-1","price":500,"materials":{"2":1,"3":1,"5":1}},
+        {"name":"forest","id":"park-2","price":1000,"materials":{"4":4}}
         ]
     }
 ]
@@ -48,6 +50,7 @@ def create_file(name,pin):
     thing={
         "name":name,
         "money":5000,
+        "population":0,
         "hash":m.hexdigest(),
         "tax":1,
         "grid":grid,
@@ -73,7 +76,7 @@ def collect_factory(b):
         coord=i[0].split("-")
         factory=int(b["grid"][int(coord[0])][int(coord[1])].replace("factory-",""))
         print((minutes_since(i[1]).total_seconds()/3600))
-        items=round((minutes_since(i[1]).total_seconds()/3600)/factory)
+        items=(minutes_since(i[1]).total_seconds()/3600)/factory
         try:
             b["resources"][str(factory)]+=items
         except KeyError:
@@ -88,3 +91,24 @@ def has_mat(b,mats):
         if b["resources"][i[0]] < i[1]:
             return False
     return True
+def get_adjacent_cells(grid, x_coord, y_coord ):
+    result = []
+    for x,y in [(x_coord+i,y_coord+j) for i in (-1,0,1) for j in (-1,0,1) if i != 0 or j != 0]:        
+        result.append(grid[x][y])
+    return [i for i in result if i != ""]
+def census(b):
+    cnt=0
+    for x, i in enumerate(b["grid"]):
+        for y, j in enumerate(i):
+            if "home" in j:
+                pop=HOUSING_POP[int(j.split("-")[1])]
+                cells=[i for i in get_adjacent_cells(b["grid"],x,y) if "park" in i]
+                for i in cells:
+                    pop+=round(pop*(int(i.split("-")[1])/100))
+                cnt+=pop
+    b["population"]=cnt
+    return b
+                
+
+                
+
