@@ -97,6 +97,6 @@ app.jinja_env.globals.update(home_type=refs.home_type)
 app.jinja_env.globals.update(add_comma=refs.add_comma)
 app.jinja_env.globals.update(len=len)
 if __name__ == "__main__":
-    refs.collect_factory(b)
+    
     app.run("0.0.0.0",8080,debug=True) # if run from file, debug mode
     f.close()
