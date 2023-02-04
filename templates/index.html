@@ -82,7 +82,7 @@ td {
             {% endfor %}
             <br>
             <h2 class="white">Tax per hour: ${{tpm}}</h2>
-            <h3 class="white">last collection: <br>tax:<br><span id="lc"></span></h3>
+            <h3 class="white"><br>tax to collect:<br><span id="lc"></span></h3>
             <h3><a href="/collect_tax">collect tax</a><br><a href="/collect_factory">collect materials</a></a></h3>
             <h3><a href="/expand"><img src="/static/expand.png" width="64px"> $10K per plot for ${{add_comma(((len(grid)+1)*2)*10000)}}</a></h3>
             <div id="shop">
@@ -90,7 +90,15 @@ td {
                 <button type="button" class="collapsible">{{i["name"]}}</button>
                 <div class="content">
                     {% for item in i["items"] %}
-                        <button onclick="highlight(this)" class="shop-clear"><img src="/static/{{get_type(item['id'])}}/{{home_type(item['id'],hid)}}.png" id="{{item['price']}}"><br>{{item["name"]}}<br>${{item["price"]}}</button>
+                        <button onclick="highlight(this)" class="shop-clear"><img src="/static/{{get_type(item['id'])}}/{{home_type(item['id'],hid)}}.png" id="{{item['price']}}"><br>{{item["name"]}}<br>{% if "materials" in item%}
+                            <br>
+                            {% for i in item["materials"].items()%}
+                                <img src="/static/production/{{i[0]}}.png">&times;{{i[1]}}
+                            {%endfor%}
+                            {%endif%}<span>${{add_comma(item["price"])}}</span>
+                        
+                        </button>
+                        
                         <br>
                     {%endfor%}
                 </div>
@@ -102,12 +110,13 @@ td {
 </body>
 <script>
     var loaded;
+    var price;
     function build(x,y) {
         console.log([x,y,loaded])
         if (loaded===undefined) {
             alert("please select something to buy before building")
         } else {
-            fetch("/build/"+loaded+"/"+x+"/"+y+"/"+document.getElementsByClassName("shop-clear")[0].children[0].id).then(x=>x.json).then(y=>location.reload())
+            fetch("/build/"+loaded+"/"+x+"/"+y+"/"+price).then(x=>x.json).then(y=>location.reload())
             
         }
     }
@@ -119,6 +128,8 @@ td {
         url=object.children[0].src.split("/")
         console.log(url[url.length-1].replace(".png",""))
         loaded=url[url.length-1].replace(".png","")
+        price=object.children[object.children.length-1].innerText.replace("$","").replace(",","")
+        
     }
     var coll = document.getElementsByClassName("collapsible");
     var i;
@@ -136,7 +147,7 @@ td {
     }
     var date = new Date(0);
     date.setUTCSeconds({{dt["tax"]}})
-    document.getElementById("lc").innerText=date.toLocaleString()
+    document.getElementById("lc").innerHTML=((((new Date().getTime()/1000)-(parseFloat({{dt["tax"]}})))/3600)/parseFloat({{tpm}})).toFixed(2)
     caches.open("img-assets")
     .then(cache => {
     cache.addAll(
