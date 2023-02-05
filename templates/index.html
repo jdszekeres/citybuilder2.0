@@ -108,7 +108,8 @@ td {
                 {% endfor %}
             </div>
             <br>
-            made with flask by jdszekeres
+            <p class="white">made with flask by <a href="https://github.com/jdszekeres">jdszekeres</a></p>
+            <br>
         </div>
 
     </div>
@@ -152,7 +153,9 @@ td {
     }
     var date = new Date(0);
     date.setUTCSeconds({{dt["tax"]}})
-    document.getElementById("lc").innerHTML=((((new Date().getTime()/1000)-(parseFloat({{dt["tax"]}})))/3600)/parseFloat({{tpm}})).toFixed(2)
+    timeinhr=((new Date().getTime()/1000)-(parseFloat({{dt["tax"]}})))/3600
+    money=(timeinhr*{{tpm}})
+    document.getElementById("lc").innerHTML=money.toFixed(2)
     caches.open("img-assets")
     .then(cache => {
     cache.addAll(

@@ -17,7 +17,6 @@ city_file="my_city.json"
 f=open(city_file)
 b=json.loads(f.read())
 f.close()
-assets_folder = "assets"
 
 @app.route("/")
 def index():
@@ -54,6 +53,8 @@ def sell_goods(typeof):
         price = b["resources"][typeof] * refs.MATERIAL_PRICES[int(typeof)]
         b["resources"][typeof]=0
         b["money"]+=price
+        if "c" in typeof:
+            b["money"]+=100
         f=open(city_file,"w+")
         f.write(json.dumps(b))
         f.close()
@@ -84,7 +85,7 @@ def build(building,x,y,price):
     b["money"]-=int(price)
     print(x,y)
     b["grid"][x][y]=building
-    b["tax"]+=round(int(price)/1000)
+    b["tax"]+=int(price)/1000
     b=refs.apply_factory(b)
     b=refs.census(b)
     f=open(city_file,"w+")
@@ -102,6 +103,15 @@ def expand():
     f.write(json.dumps(b))
     f.close()
     return redirect("/")
+@app.route("/convert/<i>")
+def convert(i):
+    global b
+    b=refs.convert_raw(b,str(i))
+    f=open(city_file,"w+")
+    f.write(json.dumps(b))
+    f.close()
+    return redirect("/")
+
 app.jinja_env.globals.update(round=round) # pass functions jinga
 app.jinja_env.globals.update(get_type=refs.get_type) # pass functions jinga
 app.jinja_env.globals.update(enumerate=enumerate)
