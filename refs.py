@@ -54,7 +54,7 @@ def create_file(name,pin):
         "hash":m.hexdigest(),
         "tax":1,
         "grid":grid,
-        "resources": {},
+        "resources": {"1":1,"2":2},
         "datetime":{
             "tax":time_in_future(0),
             "factory":{}
