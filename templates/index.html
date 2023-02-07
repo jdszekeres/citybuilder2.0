@@ -91,7 +91,7 @@ td {
             <h2 class="white"><img src="/static/person.png">{{add_comma(pop)}}</h2>
             <div class="resources">
             {% for i in resources %}
-                <div class="item"><img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'"><span class="white">&times; {{add_comma(floor(i[1]))}}</span><br></div>
+                <div class="item"><img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'" oncontextmenu="location.href='/convert/{{i[0]}}';return false"><span class="white">&times; {{add_comma(floor(i[1]))}}</span><br></div>
             {% endfor %}
             </div>
             <br>
