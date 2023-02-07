@@ -7,3 +7,7 @@ All buildings require money to create
 you can collect money with the following:
 - Collecting tax
 - Selling materials you produced
+that money can build:
+- homes
+- factories
+- parks
