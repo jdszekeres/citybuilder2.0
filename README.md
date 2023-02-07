@@ -12,3 +12,5 @@ that money can build:
 - homes
 - factories
 - parks
+All buildings generate tax for your city proportional to their price
+
