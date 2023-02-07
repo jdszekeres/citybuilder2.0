@@ -23,7 +23,7 @@ SHOP = [
         {"name":"playground", "id":"park-1","price":500,"materials":{"2":1,"3":1,"5":1}},
         {"name":"forest","id":"park-2","price":1000,"materials":{"4":4}},
         {"name":"small park", "id":"park-3","price":250,"materials":{"4":1}},
-        {"name":"waterpark", "id":"park-4","price":500,"materials":{"2":5,"7":1}},
+        {"name":"waterpark", "id":"park-4","price":500,"materials":{"2":5,"7":1,"c8":1}},
         ]
     }
 ]

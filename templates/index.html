@@ -95,7 +95,7 @@ td {
             {% endfor %}
             </div>
             <br>
-            <h2 class="white">Tax per hour: ${{tpm}}</h2>
+            <h2 class="white">Tax per hour: ${{add_comma(tpm)}}</h2>
             <h3 class="white"><br>tax to collect:<br><span id="lc"></span></h3>
             <h3><a href="/collect_tax">collect tax</a><br><a href="/collect_factory">collect materials</a></a></h3>
             <h3><a href="/expand"><img src="/static/expand.png" width="64px"> $10K per plot for ${{add_comma(((len(grid)+1)*2)*10000)}}</a></h3>
@@ -166,9 +166,9 @@ td {
     }
     var date = new Date(0);
     date.setUTCSeconds({{dt["tax"]}})
-    timeinhr=((new Date().getTime()/1000)-(parseFloat({{dt["tax"]}})))/3600
+    setInterval(()=>{timeinhr=((new Date().getTime()/1000)-(parseFloat({{dt["tax"]}})))/3600
     money=(timeinhr*{{tpm}})
-    document.getElementById("lc").innerHTML=money.toFixed(2)
+    document.getElementById("lc").innerHTML=money.toLocaleString("en-us",{ style: 'currency', currency: 'USD' })},1000)
     caches.open("img-assets")
     .then(cache => {
     cache.addAll(

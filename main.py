@@ -55,7 +55,7 @@ def sell_goods(typeof):
         price = b["resources"][typeof] * refs.MATERIAL_PRICES[int(s)]
         b["resources"][typeof]=0
         b["money"]+=price
-        if "c" in typeof and b["resources"]["c"+s] is not 0:
+        if "c" in typeof and b["resources"]["c"+s] != 0:
             b["money"]+=100
         f=open(city_file,"w+")
         f.write(json.dumps(b))
@@ -107,6 +107,8 @@ def expand():
 @app.route("/convert/<i>")
 def convert(i):
     global b
+    if "c" in i:
+        return redirect("/")
     b=refs.convert_raw(b,str(i))
     f=open(city_file,"w+")
     f.write(json.dumps(b))
