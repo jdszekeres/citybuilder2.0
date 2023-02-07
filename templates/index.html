@@ -8,7 +8,7 @@
     <style>
         .sidebar {
   height: 100%;
-  width: 160px;
+  width: 220px;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -18,11 +18,11 @@
   padding-top: 20px;
 }
 .main {
-  margin-right: 160px; /* Same as the width of the sidenav */
+  margin-right: 220px; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
   padding: 0px 10px;
 position: fixed;
-left: 160px;
+left: 220px;
 }
 
 .white, #shop {
@@ -57,6 +57,17 @@ td {
     border: 5px solid black; 
   outline: 1px solid yellow;
 }
+.resources {
+    width: 220px;
+    height: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+.item {
+    flex: 0 0 40%;
+}
+
     </style>
 </head>
 <body>
@@ -76,11 +87,13 @@ td {
                 {%endfor%}
             </table>
         <div class="sidebar">
-            <h1 class="white">${{add_comma(round(money,2))}}</h1>
+            <h1 class="white">${{add_comma(round(money))}}</h1>
             <h2 class="white"><img src="/static/person.png">{{add_comma(pop)}}</h2>
+            <div class="resources">
             {% for i in resources %}
-                <img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'"><span class="white">&times; {{add_comma(floor(i[1]))}}</span><br>
+                <div class="item"><img src="/static/production/{{i[0]}}.png" onclick="location.href='/sellmat/{{i[0]}}'"><span class="white">&times; {{add_comma(floor(i[1]))}}</span><br></div>
             {% endfor %}
+            </div>
             <br>
             <h2 class="white">Tax per hour: ${{tpm}}</h2>
             <h3 class="white"><br>tax to collect:<br><span id="lc"></span></h3>

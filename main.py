@@ -27,7 +27,7 @@ def index():
     tpm=b["tax"]
     dt=b["datetime"]
     home_id=random.randint(1,refs.home_count)
-    return render_template("index.html",money=money,grid=grid,resources=resources.items(),tpm=tpm,shop=refs.SHOP,dt=dt,hid=home_id,pop=b["population"]) # render main page 
+    return render_template("index.html",money=money,grid=grid,resources=sorted(resources.items()),tpm=tpm,shop=refs.SHOP,dt=dt,hid=home_id,pop=b["population"]) # render main page 
 @app.route("/collect_tax")
 def collect_tax():
     global b
@@ -49,16 +49,17 @@ def collect_materials():
     return redirect("/")
 @app.route("/sellmat/<typeof>")
 def sell_goods(typeof):
+    s=typeof.replace("c","")
     try:
-        price = b["resources"][typeof] * refs.MATERIAL_PRICES[int(typeof)]
+        
+        price = b["resources"][typeof] * refs.MATERIAL_PRICES[int(s)]
         b["resources"][typeof]=0
         b["money"]+=price
-        if "c" in typeof:
+        if "c" in typeof and b["resources"]["c"+s] is not 0:
             b["money"]+=100
         f=open(city_file,"w+")
         f.write(json.dumps(b))
         f.close()
-        print(refs.add_comma(price)+":"+refs.PRODUCTION_ITEMS[typeof])
         return redirect("/")
 
     except Exception as e:
