@@ -35,10 +35,13 @@ Money: money is used to convert **resouces** into evolved resouces and to buy bu
 
 Tax: An amount of **money** proportinal to the sum of all the prices of your products
 
+Population: The number of people who live in your city
+
 Materials, Resouces: Products able to be collected every hour based on how many factories of that type have placed on your **game field**
 
 Sidebar: an area occupying the right side of the window that allows you to manage various aspects of your city
 
 Game field: The area left of your **sidebar** that shows your city
 
+Building: A building generates **tax** and/or **population**
 

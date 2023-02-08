@@ -7,7 +7,7 @@ home_count = 2 # number of home styles (max 2nd number in assets/home) ie. home2
 PRODUCTION_ITEMS=["","Wood","Steel","Plastic","Seeds","Sand","Ore","Chemicals","ice"] # list of producable materials
 FACTORY_PRICES  =["", 2500,  5000,   7500,     10000,  15000, 20000, 30000,50000]
 MATERIAL_PRICES = ["",2,   5,    10,    20,    50,     100,   150   , 300, 1000]
-CRAFTSMAN_ITEMS = ["","Planks","Scrap Metal", "Bag","Sapling","Clay","Minerals","","Water"]
+CRAFTSMAN_ITEMS = ["","Planks","Scrap Metal", "Bag","Sapling","Clay","Minerals","Asphalt","Water"]
 HOUSING_POP=["",7,150,1000]
 SHOP = [
     {"name":"homes","items":[
@@ -22,7 +22,7 @@ SHOP = [
     [
         {"name":"playground", "id":"park-1","price":500,"materials":{"2":1,"3":1,"5":1}},
         {"name":"forest","id":"park-2","price":1000,"materials":{"4":4}},
-        {"name":"small park", "id":"park-3","price":250,"materials":{"4":1}},
+        {"name":"small park", "id":"park-3","price":250,"materials":{"4":1,"c7":1}},
         {"name":"waterpark", "id":"park-4","price":500,"materials":{"2":5,"7":1,"c8":1}},
         {"name":"Ferris Wheel","id":"park-5","price":1500,"materials":{"2":5,"c2":5}}
         ]
