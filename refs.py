@@ -24,6 +24,7 @@ SHOP = [
         {"name":"forest","id":"park-2","price":1000,"materials":{"4":4}},
         {"name":"small park", "id":"park-3","price":250,"materials":{"4":1}},
         {"name":"waterpark", "id":"park-4","price":500,"materials":{"2":5,"7":1,"c8":1}},
+        {"name":"Ferris Wheel","id":"park-5","price":1500,"materials":{"2":5,"c2":5}}
         ]
     }
 ]
